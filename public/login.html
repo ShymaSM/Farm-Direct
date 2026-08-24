@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Register - FarmDirect</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .hidden { display: none !important; }
+    .form-switch { text-align: center; margin-top: 15px; font-size: 14px; color: #666; }
+    .form-switch a { color: var(--primary-color); cursor: pointer; font-weight: 600; text-decoration: none; }
+    .auth-box { width: 100%; max-width: 450px; max-height: 80vh; overflow-y: auto; padding: 20px; }
+    /* Hide scrollbar for auth box */
+    .auth-box::-webkit-scrollbar { width: 6px; }
+    .auth-box::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
+  </style>
+</head>
+<body class="login-body">
+  <div class="login-container">
+    <div class="login-left">
+      <div class="login-branding">
+        <a href="index.html" class="logo">🌾 <span>FarmDirect</span></a>
+        <h2>Grow More. Earn More. Waste Less.</h2>
+        <p>Join the AI-powered marketplace connecting farmers directly with business buyers.</p>
+      </div>
+    </div>
+    
+    <div class="login-right">
+      <div class="login-box auth-box">
+        
+        <!-- LOGIN FORM -->
+        <div id="loginSection">
+          <h2>Welcome Back</h2>
+          <p class="login-subtitle">Please sign in to your account</p>
+          
+          <form id="loginForm">
+            <div class="input-group">
+              <label for="loginEmail">Email Address</label>
+              <input type="email" id="loginEmail" placeholder="Enter your email" required>
+            </div>
+            <div class="input-group">
+              <label for="loginPassword">Password</label>
+              <input type="password" id="loginPassword" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="primary-btn full-width">Sign In</button>
+            <p class="form-switch">Don't have an account? <a onclick="toggleForms('registerSection')">Create Account</a></p>
+          </form>
+        </div>
+
+        <!-- REGISTRATION SELECTION -->
+        <div id="registerSection" class="hidden">
+          <h2>Create Account</h2>
+          <p class="login-subtitle">How would you like to join FarmDirect?</p>
+          
+          <div class="role-selector" style="flex-direction: column;">
+            <label class="role-option" onclick="showRegistrationForm('farmer')">
+              <div class="role-card" style="padding: 20px;">
+                <span class="role-icon" style="font-size: 30px;">👨‍🌾</span>
+                <span style="font-size: 18px;">Continue as Farmer</span>
+              </div>
+            </label>
+            <label class="role-option" onclick="showRegistrationForm('buyer')">
+              <div class="role-card" style="padding: 20px;">
+                <span class="role-icon" style="font-size: 30px;">🏪</span>
+                <span style="font-size: 18px;">Continue as Business</span>
+              </div>
+            </label>
+          </div>
+          <p class="form-switch">Already have an account? <a onclick="toggleForms('loginSection')">Sign In</a></p>
+        </div>
+
+        <!-- FARMER REGISTRATION FORM -->
+        <div id="farmerRegSection" class="hidden">
+          <h2>Farmer Registration</h2>
+          <form id="farmerRegForm">
+            <div class="input-group"><label for="f_name">Full Name</label><input type="text" id="f_name" required></div>
+            <div class="input-group"><label for="f_email">Email Address</label><input type="email" id="f_email" required></div>
+            <div class="input-group"><label for="f_phone">Phone Number</label><input type="text" id="f_phone" required></div>
+            <div class="input-group"><label for="f_password">Password</label><input type="password" id="f_password" required></div>
+            <div class="input-group"><label for="f_confirm_password">Confirm Password</label><input type="password" id="f_confirm_password" required></div>
+            <div class="input-group"><label for="f_farmName">Farm Name</label><input type="text" id="f_farmName" required></div>
+            <div class="input-group"><label for="f_location">Location / City</label><input type="text" id="f_location" required></div>
+            <div class="input-group"><label for="f_district">District</label><input type="text" id="f_district" required></div>
+            <div class="input-group"><label for="f_state">State</label><input type="text" id="f_state" required></div>
+            <button type="submit" class="primary-btn full-width">Register as Farmer</button>
+            <p class="form-switch"><a onclick="toggleForms('registerSection')">← Back to Role Selection</a></p>
+          </form>
+        </div>
+
+        <!-- BUYER REGISTRATION FORM -->
+        <div id="buyerRegSection" class="hidden">
+          <h2>Business Registration</h2>
+          <form id="buyerRegForm">
+            <div class="input-group"><label for="b_name">Owner Name</label><input type="text" id="b_name" required></div>
+            <div class="input-group"><label for="b_businessName">Business Name</label><input type="text" id="b_businessName" required></div>
+            <div class="input-group">
+              <label for="b_businessType">Business Type</label>
+              <select id="b_businessType" required>
+                <option value="Restaurant">Restaurant</option>
+                <option value="Hotel">Hotel</option>
+                <option value="Bakery">Bakery</option>
+                <option value="Supermarket">Supermarket</option>
+                <option value="Grocery Store">Grocery Store</option>
+                <option value="Food Manufacturing">Food Manufacturing</option>
+                <option value="Catering Service">Catering Service</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="input-group"><label for="b_email">Email Address</label><input type="email" id="b_email" required></div>
+            <div class="input-group"><label for="b_phone">Phone Number</label><input type="text" id="b_phone" required></div>
+            <div class="input-group"><label for="b_password">Password</label><input type="password" id="b_password" required></div>
+            <div class="input-group"><label for="b_confirm_password">Confirm Password</label><input type="password" id="b_confirm_password" required></div>
+            <div class="input-group"><label for="b_location">Business Location / City</label><input type="text" id="b_location" required></div>
+            <div class="input-group"><label for="b_district">District</label><input type="text" id="b_district" required></div>
+            <div class="input-group"><label for="b_state">State</label><input type="text" id="b_state" required></div>
+            <button type="submit" class="primary-btn full-width">Register as Business</button>
+            <p class="form-switch"><a onclick="toggleForms('registerSection')">← Back to Role Selection</a></p>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+  <script type="module" src="script.js"></script>
+  <script>
+    function toggleForms(sectionId) {
+      document.getElementById('loginSection').classList.add('hidden');
+      document.getElementById('registerSection').classList.add('hidden');
+      document.getElementById('farmerRegSection').classList.add('hidden');
+      document.getElementById('buyerRegSection').classList.add('hidden');
+      document.getElementById(sectionId).classList.remove('hidden');
+    }
+    
+    function showRegistrationForm(role) {
+      if (role === 'farmer') toggleForms('farmerRegSection');
+      else toggleForms('buyerRegSection');
+    }
+  </script>
+</body>
+</html>

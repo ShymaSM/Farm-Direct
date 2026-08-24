@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business Dashboard | FarmDirect</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="logo">🌾 <span>FarmDirect</span></a>
+      </div>
+      
+      <div class="user-profile">
+        <div class="avatar" id="userAvatar">🏪</div>
+        <div class="user-info">
+          <h3 id="userName">Business Owner</h3>
+          <span class="role-badge" id="userRoleBadge">Business</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav" id="sidebarNav">
+        <a href="#" class="nav-item active" onclick="switchTab('dashboard', this)">🏠 Dashboard</a>
+        <a href="#" class="nav-item" onclick="switchTab('marketplace', this)">🌾 Marketplace</a>
+        <a href="#" class="nav-item" onclick="switchTab('requests', this)">📦 My Requests</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" onclick="logout()">Log Out</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <h2 id="pageTitle">Dashboard</h2>
+        </div>
+      </header>
+
+      <div class="dashboard-content" id="dashboardContent">
+        
+        <!-- DASHBOARD TAB -->
+        <div id="tab-dashboard" class="tab-content">
+          <div class="dashboard-grid">
+            <div class="stat-card">
+              <div class="stat-icon">📈</div>
+              <div class="stat-details">
+                <h3>+15%</h3>
+                <p>Tomato Demand Today</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">📉</div>
+              <div class="stat-details">
+                <h3>-5%</h3>
+                <p>Onion Price Drop</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">🧑‍🌾</div>
+              <div class="stat-details">
+                <h3>12</h3>
+                <p>New Local Farmers</p>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="section-title">📰 Daily Market & Selling News</h2>
+          <div class="matches-grid">
+            <div class="business-card" style="border-left: 4px solid var(--primary-color);">
+              <h4 style="color: var(--primary-color); margin-bottom: 5px;">Huge Harvest in Your District</h4>
+              <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">Over 500kg of Premium Organic Tomatoes just listed by 3 local farmers. Great opportunity for bulk buyers!</p>
+              <span style="font-size: 11px; color: #888;">Just Now</span>
+            </div>
+            <div class="business-card" style="border-left: 4px solid var(--secondary-color);">
+              <h4 style="color: var(--secondary-color); margin-bottom: 5px;">Price Alert: Potatoes</h4>
+              <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">Market prices for potatoes have stabilized at ₹15/kg. Now is a great time to send requirement requests.</p>
+              <span style="font-size: 11px; color: #888;">2 hours ago</span>
+            </div>
+            <div class="business-card" style="border-left: 4px solid #3b82f6;">
+              <h4 style="color: #3b82f6; margin-bottom: 5px;">New Feature Added</h4>
+              <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">You can now view live inventory directly from the Marketplace tab. Try it out today!</p>
+              <span style="font-size: 11px; color: #888;">Yesterday</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- MARKETPLACE TAB -->
+        <div id="tab-marketplace" class="tab-content" style="display: none;">
+          <h2 class="section-title">🌾 Available Crops Marketplace</h2>
+          <div class="matches-grid" id="marketplaceGrid">Loading marketplace...</div>
+        </div>
+        
+        <!-- REQUESTS TAB -->
+        <div id="tab-requests" class="tab-content" style="display: none;">
+          <div id="requestsContainer">
+            <h2 class="section-title">📦 My Sent Requests</h2>
+            <div id="buyerRequestsGrid">Loading requests...</div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-card" id="actionModal">
+      <!-- Modal Content Populated via JS -->
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+  <script type="module" src="script.js"></script>
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('active');
+    }
+    
+    function switchTab(tabId, element) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.style.display = 'none';
+      });
+      // Show selected tab
+      document.getElementById('tab-' + tabId).style.display = 'block';
+      
+      // Update active nav link
+      document.querySelectorAll('.nav-item').forEach(nav => {
+        nav.classList.remove('active');
+      });
+      element.classList.add('active');
+      
+      // Update title
+      document.getElementById('pageTitle').innerText = element.innerText.replace(/[^\w\s]/g, '').trim();
+    }
+  </script>
+</body>
+</html>

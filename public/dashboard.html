@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - FarmDirect</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+
+  <div class="dashboard-layout">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">🌾 <span>FarmDirect</span></div>
+      </div>
+      
+      <div class="user-profile">
+        <div class="avatar" id="userAvatar">👨‍🌾</div>
+        <div class="user-info">
+          <h4 id="userName">Arun Kumar</h4>
+          <p id="userRoleBadge">Farmer</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" id="sidebarNav">
+        <!-- Injected via JS based on role -->
+      </nav>
+      
+      <div class="sidebar-footer">
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+      
+      <header class="dashboard-header">
+        <div class="header-search">
+          <input type="text" placeholder="Search crops, buyers...">
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn">🔔<span class="badge">3</span></button>
+          <button class="icon-btn">⚙️</button>
+        </div>
+      </header>
+
+      <div class="dashboard-content" id="dashboardContent">
+        <!-- Content changes dynamically based on role -->
+      </div>
+      
+    </main>
+
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Modal Container -->
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal" id="actionModal">
+      <!-- Modal Content injected via JS -->
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
