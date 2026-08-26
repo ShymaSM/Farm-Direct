@@ -1,23 +1,3 @@
-import { auth, db } from './firebase-config.js';
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { 
-  collection, 
-  addDoc, 
-  getDocs, 
-  query, 
-  where, 
-  doc, 
-  setDoc,
-  getDoc,
-  serverTimestamp,
-  onSnapshot 
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
 // --- Utilities ---
 function showToast(message, type = 'success') {
   const container = document.getElementById('toastContainer');
@@ -34,12 +14,12 @@ function showToast(message, type = 'success') {
 window.showToast = showToast; 
 
 // --- Auth State Observer ---
-onAuthStateChanged(auth, async (user) => {
+auth.onAuthStateChanged(async (user) => {
   if (user) {
     // User is signed in. Let's make sure they are on the right dashboard if on the login page.
     if (window.location.pathname.includes('login.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      if (userDoc.exists()) {
+      const userDoc = await db.collection("users").doc(user.uid).get();
+      if (userDoc.exists) {
         const role = userDoc.data().role;
         if (role === 'farmer') window.location.href = 'farmer-dashboard.html';
         else if (role === 'business') window.location.href = 'business-dashboard.html';
@@ -64,10 +44,10 @@ if (loginForm) {
       const email = document.getElementById('loginEmail').value;
       const password = document.getElementById('loginPassword').value;
       
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await auth.signInWithEmailAndPassword(email, password);
       
-      const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
-      if (userDoc.exists()) {
+      const userDoc = await db.collection("users").doc(userCredential.user.uid).get();
+      if (userDoc.exists) {
         const role = userDoc.data().role;
         showToast('Login successful!');
         setTimeout(() => {
@@ -99,7 +79,7 @@ if (farmerRegForm) {
         throw new Error("Passwords do not match");
       }
       
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       console.log("Firebase Auth account created:", userCredential.user.uid);
       
       const userData = {
@@ -112,11 +92,11 @@ if (farmerRegForm) {
         location: document.getElementById('f_location').value,
         district: document.getElementById('f_district').value,
         state: document.getElementById('f_state').value,
-        createdAt: serverTimestamp()
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
       };
       
       console.log("Saving user profile to Firestore...");
-      await setDoc(doc(db, "users", userCredential.user.uid), userData);
+      await db.collection("users").doc(userCredential.user.uid).set(userData);
       
       console.log("Registration completed successfully.");
       showToast('Registration successful!');
@@ -151,7 +131,7 @@ if (buyerRegForm) {
         throw new Error("Passwords do not match");
       }
       
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       console.log("Firebase Auth account created:", userCredential.user.uid);
       
       const userData = {
@@ -165,11 +145,11 @@ if (buyerRegForm) {
         location: document.getElementById('b_location').value,
         district: document.getElementById('b_district').value,
         state: document.getElementById('b_state').value,
-        createdAt: serverTimestamp()
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
       };
       
       console.log("Saving user profile to Firestore...");
-      await setDoc(doc(db, "users", userCredential.user.uid), userData);
+      await db.collection("users").doc(userCredential.user.uid).set(userData);
       
       console.log("Registration completed successfully.");
       showToast('Registration successful!');
@@ -196,14 +176,15 @@ if (window.location.pathname.includes('farmer-dashboard.html')) {
     // Wait for auth state
     auth.onAuthStateChanged(async (user) => {
       if(user) {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists() && userDoc.data().role !== 'farmer') {
+        const userDoc = await db.collection("users").doc(user.uid).get();
+        if (userDoc.exists && userDoc.data().role !== 'farmer') {
           window.location.href = 'business-dashboard.html';
           return;
         }
-        document.getElementById('userName').textContent = userDoc.data().name;
-        
-        setupFarmerListeners(user, userDoc.data());
+        if (userDoc.exists) {
+          document.getElementById('userName').textContent = userDoc.data().name;
+          setupFarmerListeners(user, userDoc.data());
+        }
       }
     });
   });
@@ -212,9 +193,9 @@ if (window.location.pathname.includes('farmer-dashboard.html')) {
 function setupFarmerListeners(user, userData) {
   // Listen for active crops
   const cropsGrid = document.getElementById('myCropsGrid');
-  const qCrops = query(collection(db, "crops"), where("farmerId", "==", user.uid));
+  const qCrops = db.collection("crops").where("farmerId", "==", user.uid);
   
-  onSnapshot(qCrops, (snapshot) => {
+  qCrops.onSnapshot((snapshot) => {
     if (snapshot.empty) {
       cropsGrid.innerHTML = '<p>You have no active crop listings.</p>';
       return;
@@ -261,9 +242,9 @@ function setupFarmerListeners(user, userData) {
           description: document.getElementById('cropDescription').value,
           location: userData.location,
           status: 'Available',
-          createdAt: serverTimestamp()
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
         };
-        await addDoc(collection(db, "crops"), cropData);
+        await db.collection("crops").add(cropData);
         showToast('Crop listing published successfully!');
         e.target.reset();
       } catch (err) {
@@ -274,8 +255,8 @@ function setupFarmerListeners(user, userData) {
 
   // Listen for notifications
   const notifGrid = document.getElementById('notificationsGrid');
-  const qNotif = query(collection(db, "notifications"), where("recipientId", "==", user.uid));
-  onSnapshot(qNotif, (snapshot) => {
+  const qNotif = db.collection("notifications").where("recipientId", "==", user.uid);
+  qNotif.onSnapshot((snapshot) => {
     if (snapshot.empty) {
       notifGrid.innerHTML = '<p>No notifications.</p>';
       return;
@@ -301,14 +282,15 @@ if (window.location.pathname.includes('business-dashboard.html')) {
     // Wait for auth state
     auth.onAuthStateChanged(async (user) => {
       if(user) {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists() && userDoc.data().role !== 'business') {
+        const userDoc = await db.collection("users").doc(user.uid).get();
+        if (userDoc.exists && userDoc.data().role !== 'business') {
           window.location.href = 'farmer-dashboard.html';
           return;
         }
-        document.getElementById('userName').textContent = userDoc.data().businessName || userDoc.data().name;
-        
-        setupBusinessListeners(user, userDoc.data());
+        if (userDoc.exists) {
+          document.getElementById('userName').textContent = userDoc.data().businessName || userDoc.data().name;
+          setupBusinessListeners(user, userDoc.data());
+        }
       }
     });
   });
@@ -316,9 +298,9 @@ if (window.location.pathname.includes('business-dashboard.html')) {
 
 function setupBusinessListeners(user, userData) {
   const mktGrid = document.getElementById('marketplaceGrid');
-  const qMkt = query(collection(db, "crops"), where("status", "==", "Available"));
+  const qMkt = db.collection("crops").where("status", "==", "Available");
   
-  onSnapshot(qMkt, (snapshot) => {
+  qMkt.onSnapshot((snapshot) => {
     window.currentMarketCrops = [];
     if (snapshot.empty) {
       mktGrid.innerHTML = '<p>No crops currently available in the marketplace.</p>';
@@ -355,9 +337,9 @@ function setupBusinessListeners(user, userData) {
   });
 
   const reqGrid = document.getElementById('buyerRequestsGrid');
-  const qReq = query(collection(db, "requests"), where("buyerId", "==", user.uid));
+  const qReq = db.collection("requests").where("buyerId", "==", user.uid);
   
-  onSnapshot(qReq, (snapshot) => {
+  qReq.onSnapshot((snapshot) => {
     if (snapshot.empty) {
       reqGrid.innerHTML = '<p>You have not sent any requests yet.</p>';
       return;
@@ -419,7 +401,7 @@ function setupBusinessListeners(user, userData) {
     document.getElementById('sendReqForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       try {
-        const reqDoc = await addDoc(collection(db, "requests"), {
+        const reqDoc = await db.collection("requests").add({
           cropId: crop.id,
           farmerId: crop.farmerId,
           buyerId: user.uid,
@@ -431,10 +413,10 @@ function setupBusinessListeners(user, userData) {
           deliveryDate: document.getElementById('reqDate').value,
           message: document.getElementById('reqMsg').value,
           status: 'pending',
-          createdAt: serverTimestamp()
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         
-        await addDoc(collection(db, "notifications"), {
+        await db.collection("notifications").add({
           recipientId: crop.farmerId,
           senderId: user.uid,
           type: "buyer_request",
@@ -442,7 +424,7 @@ function setupBusinessListeners(user, userData) {
           message: `${userData.businessName} is interested in your ${crop.cropName} crop.`,
           relatedRequestId: reqDoc.id,
           isRead: false,
-          createdAt: serverTimestamp()
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
         showToast('Requirement sent to farmer!', 'success');
@@ -464,7 +446,7 @@ function setupBusinessListeners(user, userData) {
 // Global logout
 async function logout() {
   try {
-    await signOut(auth);
+    await auth.signOut();
   } catch (err) {
     showToast(err.message, 'error');
   }
