@@ -13,6 +13,93 @@ function showToast(message, type = 'success') {
 }
 window.showToast = showToast; 
 
+// --- Firebase Mock (LocalStorage) ---
+const auth = {
+  onAuthStateChanged: (callback) => {
+    const userStr = localStorage.getItem('currentUser');
+    callback(userStr ? JSON.parse(userStr) : null);
+  },
+  signInWithEmailAndPassword: async (email, password) => {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find(u => u.email === email && u.password === password);
+    if (!user) throw new Error("Invalid email or password");
+    const userObj = { uid: user.uid, email: user.email };
+    localStorage.setItem('currentUser', JSON.stringify(userObj));
+    return { user: userObj };
+  },
+  createUserWithEmailAndPassword: async (email, password) => {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    if (users.find(u => u.email === email)) {
+      throw { code: 'auth/email-already-in-use', message: "Email already in use" };
+    }
+    const uid = 'user_' + Date.now();
+    users.push({ uid, email, password });
+    localStorage.setItem('users', JSON.stringify(users));
+    const userObj = { uid, email };
+    localStorage.setItem('currentUser', JSON.stringify(userObj));
+    return { user: userObj };
+  },
+  signOut: async () => {
+    localStorage.removeItem('currentUser');
+    window.location.href = 'login.html';
+  }
+};
+
+const db = {
+  collection: (colName) => ({
+    doc: (docId) => ({
+      get: async () => {
+        const items = JSON.parse(localStorage.getItem(colName) || '[]');
+        const item = items.find(i => i.uid === docId || i.id === docId);
+        return { exists: !!item, data: () => item };
+      },
+      set: async (data) => {
+        const items = JSON.parse(localStorage.getItem(colName) || '[]');
+        const index = items.findIndex(i => i.uid === docId || i.id === docId);
+        if (index > -1) items[index] = { ...items[index], ...data };
+        else items.push({ uid: docId, id: docId, ...data });
+        localStorage.setItem(colName, JSON.stringify(items));
+      }
+    }),
+    add: async (data) => {
+      const items = JSON.parse(localStorage.getItem(colName) || '[]');
+      const id = 'doc_' + Date.now() + Math.random().toString(36).substr(2, 9);
+      items.push({ id, ...data });
+      localStorage.setItem(colName, JSON.stringify(items));
+      return { id };
+    },
+    where: (field, op, value) => ({
+      onSnapshot: (callback) => {
+        const runCallback = () => {
+           const items = JSON.parse(localStorage.getItem(colName) || '[]');
+           const filtered = items.filter(i => {
+              if (op === '==') return i[field] === value;
+              return false;
+           });
+           const snapshot = {
+             empty: filtered.length === 0,
+             forEach: (cb) => {
+               filtered.forEach(item => cb({ id: item.id, data: () => item }));
+             }
+           };
+           callback(snapshot);
+        };
+        runCallback();
+        // Simple polling to simulate realtime updates across the app
+        setInterval(runCallback, 2000);
+      }
+    })
+  })
+};
+
+const firebase = {
+  firestore: {
+    FieldValue: {
+      serverTimestamp: () => Date.now()
+    }
+  }
+};
+
 // --- Auth State Observer ---
 auth.onAuthStateChanged(async (user) => {
   if (user) {
