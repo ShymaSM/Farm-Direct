@@ -43,7 +43,10 @@
             </div>
             <div class="input-group">
               <label for="loginPassword">Password</label>
-              <input type="password" id="loginPassword" placeholder="Enter your password" required>
+              <div class="password-wrapper">
+                <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPassword', this)">👁️</button>
+              </div>
             </div>
             <button type="submit" class="primary-btn full-width">Sign In</button>
             <p class="form-switch">Don't have an account? <a onclick="toggleForms('registerSection')">Create Account</a></p>
@@ -79,8 +82,20 @@
             <div class="input-group"><label for="f_name">Full Name</label><input type="text" id="f_name" required></div>
             <div class="input-group"><label for="f_email">Email Address</label><input type="email" id="f_email" required></div>
             <div class="input-group"><label for="f_phone">Phone Number</label><input type="text" id="f_phone" required></div>
-            <div class="input-group"><label for="f_password">Password</label><input type="password" id="f_password" required></div>
-            <div class="input-group"><label for="f_confirm_password">Confirm Password</label><input type="password" id="f_confirm_password" required></div>
+            <div class="input-group">
+              <label for="f_password">Password</label>
+              <div class="password-wrapper">
+                <input type="password" id="f_password" required>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('f_password', this)">👁️</button>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="f_confirm_password">Confirm Password</label>
+              <div class="password-wrapper">
+                <input type="password" id="f_confirm_password" required>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('f_confirm_password', this)">👁️</button>
+              </div>
+            </div>
             <div class="input-group"><label for="f_farmName">Farm Name</label><input type="text" id="f_farmName" required></div>
             <div class="input-group"><label for="f_location">Location / City</label><input type="text" id="f_location" required></div>
             <div class="input-group"><label for="f_district">District</label><input type="text" id="f_district" required></div>
@@ -111,8 +126,20 @@
             </div>
             <div class="input-group"><label for="b_email">Email Address</label><input type="email" id="b_email" required></div>
             <div class="input-group"><label for="b_phone">Phone Number</label><input type="text" id="b_phone" required></div>
-            <div class="input-group"><label for="b_password">Password</label><input type="password" id="b_password" required></div>
-            <div class="input-group"><label for="b_confirm_password">Confirm Password</label><input type="password" id="b_confirm_password" required></div>
+            <div class="input-group">
+              <label for="b_password">Password</label>
+              <div class="password-wrapper">
+                <input type="password" id="b_password" required>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('b_password', this)">👁️</button>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="b_confirm_password">Confirm Password</label>
+              <div class="password-wrapper">
+                <input type="password" id="b_confirm_password" required>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('b_confirm_password', this)">👁️</button>
+              </div>
+            </div>
             <div class="input-group"><label for="b_location">Business Location / City</label><input type="text" id="b_location" required></div>
             <div class="input-group"><label for="b_district">District</label><input type="text" id="b_district" required></div>
             <div class="input-group"><label for="b_state">State</label><input type="text" id="b_state" required></div>
@@ -140,6 +167,17 @@
     function showRegistrationForm(role) {
       if (role === 'farmer') toggleForms('farmerRegSection');
       else toggleForms('buyerRegSection');
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        btn.textContent = '👁️';
+      }
     }
   </script>
 </body>
