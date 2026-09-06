@@ -103,6 +103,12 @@ const firebase = {
 // --- Auth State Observer ---
 auth.onAuthStateChanged(async (user) => {
   if (user) {
+    // update index.html nav
+    const navActions = document.getElementById('navActions');
+    if (navActions) {
+      navActions.innerHTML = `<button class="nav-btn" style="background:#ef4444; margin-right: 10px; font-family: inherit; border: none; cursor: pointer;" onclick="logout()">Log Out</button><a href="login.html" class="nav-btn">Dashboard</a>`;
+    }
+
     // User is signed in. Let's make sure they are on the right dashboard if on the login page.
     if (window.location.pathname.includes('login.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
       const userDoc = await db.collection("users").doc(user.uid).get();

@@ -655,6 +655,14 @@ body {
   display: none;
   font-size: 24px;
 }
+.close-sidebar-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text-muted);
+}
 .dashboard-content {
   flex: 1;
   padding: 30px;
@@ -886,6 +894,7 @@ body {
 /* Responsive */
 @media (max-width: 768px) {
   .hamburger-menu { display: block; }
+  .close-sidebar-btn { display: block; }
   .nav-menu {
     position: absolute;
     top: 100%;
