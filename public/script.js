@@ -1,3 +1,65 @@
+// --- Translation & TTS Logic ---
+function toggleLanguage() {
+  const currentLang = localStorage.getItem('appLang') || 'en';
+  const newLang = currentLang === 'en' ? 'ta' : 'en';
+  localStorage.setItem('appLang', newLang);
+  translatePage();
+}
+
+function translatePage() {
+  const lang = localStorage.getItem('appLang') || 'en';
+  const isTa = lang === 'ta';
+  
+  const toggleBtns = document.querySelectorAll('#langToggleBtn');
+  toggleBtns.forEach(btn => btn.innerText = isTa ? 'English | தமிழ்' : 'தமிழ் | English');
+
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  let node;
+  while ((node = walker.nextNode())) {
+      const parent = node.parentElement;
+      if (parent && ['SCRIPT', 'STYLE', 'INPUT', 'TEXTAREA'].includes(parent.tagName)) continue;
+      
+      let text = node.nodeValue.trim();
+      if (!text) continue;
+      
+      if (typeof node.originalText === 'undefined') {
+          node.originalText = text;
+      }
+      
+      const en = node.originalText;
+      if (isTa && window.translations && window.translations[en]) {
+          node.nodeValue = node.nodeValue.replace(text, window.translations[en]);
+      } else if (!isTa) {
+          node.nodeValue = node.nodeValue.replace(text, en);
+      }
+  }
+  
+  document.querySelectorAll('input, textarea').forEach(el => {
+      if (el.placeholder) {
+          if (!el.dataset.enPlaceholder) el.dataset.enPlaceholder = el.placeholder;
+          const en = el.dataset.enPlaceholder;
+          el.placeholder = (isTa && window.translations && window.translations[en]) ? window.translations[en] : en;
+      }
+  });
+}
+
+function playVoiceInstruction() {
+  const lang = localStorage.getItem('appLang') || 'en';
+  let text = lang === 'ta' 
+    ? "பயிர் பெயர், அளவு, தரம் மற்றும் விலையை சரியாக உள்ளிடவும். பின்னர் பயிரை வெளியிடவும் பொத்தானை அழுத்தவும்." 
+    : "Please enter the crop name, quantity, quality, and price correctly. Then click Publish Crop.";
+  
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang === 'ta' ? 'ta-IN' : 'en-US';
+  window.speechSynthesis.speak(utterance);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  translatePage();
+});
+window.toggleLanguage = toggleLanguage;
+window.playVoiceInstruction = playVoiceInstruction;
+
 // --- Utilities ---
 function showToast(message, type = 'success') {
   const container = document.getElementById('toastContainer');
@@ -313,6 +375,7 @@ function setupFarmerListeners(user, userData) {
       `;
     });
     cropsGrid.innerHTML = html;
+    translatePage();
   }, (err) => {
     console.error(err);
     cropsGrid.innerHTML = '<p>Error loading crops.</p>';
@@ -365,6 +428,7 @@ function setupFarmerListeners(user, userData) {
       `;
     });
     notifGrid.innerHTML = html;
+    translatePage();
   });
 }
 
@@ -427,6 +491,7 @@ function setupBusinessListeners(user, userData) {
       `;
     });
     mktGrid.innerHTML = html;
+    translatePage();
   });
 
   const reqGrid = document.getElementById('buyerRequestsGrid');
@@ -450,6 +515,7 @@ function setupBusinessListeners(user, userData) {
       `;
     });
     reqGrid.innerHTML = html;
+    translatePage();
   });
 
   // Modal logic attachment
@@ -490,6 +556,7 @@ function setupBusinessListeners(user, userData) {
         </div>
       </form>
     `;
+    translatePage();
     
     document.getElementById('sendReqForm').addEventListener('submit', async (e) => {
       e.preventDefault();

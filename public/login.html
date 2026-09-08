@@ -22,14 +22,19 @@
   <div class="login-container">
     <div class="login-left">
       <div class="login-branding">
-        <a href="index.html" class="logo">🌾 <span>FarmDirect</span></a>
-        <h2>Grow More. Earn More. Waste Less.</h2>
+        <a href="index.html" class="logo" style="display:flex; align-items:center; text-decoration:none; margin-bottom: 20px;">
+          <img src="Logo.png" alt="FarmDirect Logo" style="height: 60px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));" /> 
+        </a>
+        <h2 style="margin-top: 20px;">Grow More. Earn More. Waste Less.</h2>
         <p>Join the AI-powered marketplace connecting farmers directly with business buyers.</p>
       </div>
     </div>
     
     <div class="login-right">
-      <div class="login-box auth-box">
+      <div class="login-box auth-box glass-panel" style="padding: 30px; border: none;">
+        <div style="text-align: right; margin-bottom: 10px;">
+          <button onclick="toggleLanguage()" id="langToggleBtn" class="lang-btn">தமிழ் | English</button>
+        </div>
         
         <!-- LOGIN FORM -->
         <div id="loginSection">
@@ -45,7 +50,9 @@
               <label for="loginPassword">Password</label>
               <div class="password-wrapper">
                 <input type="password" id="loginPassword" placeholder="Enter your password" required>
-                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPassword', this)">👁️</button>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPassword', this)">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:20px;height:20px;color:#6b7280;"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+                </button>
               </div>
             </div>
             <button type="submit" class="primary-btn full-width">Sign In</button>
@@ -86,14 +93,18 @@
               <label for="f_password">Password</label>
               <div class="password-wrapper">
                 <input type="password" id="f_password" required>
-                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('f_password', this)">👁️</button>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('f_password', this)">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:20px;height:20px;color:#6b7280;"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+                </button>
               </div>
             </div>
             <div class="input-group">
               <label for="f_confirm_password">Confirm Password</label>
               <div class="password-wrapper">
                 <input type="password" id="f_confirm_password" required>
-                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('f_confirm_password', this)">👁️</button>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('f_confirm_password', this)">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:20px;height:20px;color:#6b7280;"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+                </button>
               </div>
             </div>
             <div class="input-group"><label for="f_farmName">Farm Name</label><input type="text" id="f_farmName" required></div>
@@ -130,14 +141,18 @@
               <label for="b_password">Password</label>
               <div class="password-wrapper">
                 <input type="password" id="b_password" required>
-                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('b_password', this)">👁️</button>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('b_password', this)">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:20px;height:20px;color:#6b7280;"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+                </button>
               </div>
             </div>
             <div class="input-group">
               <label for="b_confirm_password">Confirm Password</label>
               <div class="password-wrapper">
                 <input type="password" id="b_confirm_password" required>
-                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('b_confirm_password', this)">👁️</button>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('b_confirm_password', this)">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:20px;height:20px;color:#6b7280;"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+                </button>
               </div>
             </div>
             <div class="input-group"><label for="b_location">Business Location / City</label><input type="text" id="b_location" required></div>
@@ -154,6 +169,7 @@
 
   <div id="toastContainer" class="toast-container"></div>
 
+  <script src="translations.js"></script>
   <script src="script.js"></script>
   <script>
     function toggleForms(sectionId) {
@@ -173,10 +189,10 @@
       const input = document.getElementById(inputId);
       if (input.type === 'password') {
         input.type = 'text';
-        btn.textContent = '🙈';
+        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:20px;height:20px;color:#6b7280;"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>';
       } else {
         input.type = 'password';
-        btn.textContent = '👁️';
+        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:20px;height:20px;color:#6b7280;"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>';
       }
     }
   </script>

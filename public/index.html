@@ -13,7 +13,9 @@
 
   <nav class="glass-nav">
     <div class="logo">
-      <img src="Logo.png" alt="FarmDirect Logo" style="height: 30px; vertical-align: middle; margin-right: 8px;" /> <span>FarmDirect</span>
+      <a href="index.html" style="display: flex; align-items: center;">
+        <img src="Logo.png" alt="FarmDirect Logo" style="height: 55px; vertical-align: middle; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));" /> 
+      </a>
     </div>
 
     <button class="hamburger-menu" onclick="toggleMobileNav()">☰</button>
@@ -26,7 +28,8 @@
       </div>
 
       <div class="nav-actions" id="navActions">
-        <a href="login.html" class="nav-btn">Login / Sign Up</a>
+        <button onclick="toggleLanguage()" id="langToggleBtn" class="lang-btn">தமிழ் | English</button>
+        <a href="login.html" class="nav-btn" data-i18n="Login / Sign Up">Login / Sign Up</a>
       </div>
     </div>
   </nav>
@@ -50,7 +53,7 @@
       </div>
     </div>
 
-    <div class="hero-card dynamic-hero-card" id="todayMarketCard">
+    <div class="hero-card dynamic-hero-card glass-panel" id="todayMarketCard">
       <!-- Dynamic Content injected via JS based on Date -->
       <div class="card-loading">Loading Market Insights...</div>
     </div>
@@ -84,28 +87,28 @@
     </div>
 
     <div class="steps">
-      <div class="step glass-step">
+      <div class="step glass-panel">
         <span>01</span>
         <div class="step-icon">🌾</div>
         <h3>Add Your Crop</h3>
         <p>Farmers add crop quantity, location and harvest date.</p>
       </div>
 
-      <div class="step glass-step">
+      <div class="step glass-panel">
         <span>02</span>
         <div class="step-icon">🤖</div>
         <h3>AI Analysis</h3>
         <p>AI analyzes demand, market price and buyer requirements.</p>
       </div>
 
-      <div class="step glass-step">
+      <div class="step glass-panel">
         <span>03</span>
         <div class="step-icon">🤝</div>
         <h3>Smart Match</h3>
         <p>Farmers receive the best nearby business matches.</p>
       </div>
 
-      <div class="step glass-step">
+      <div class="step glass-panel">
         <span>04</span>
         <div class="step-icon">🚚</div>
         <h3>Direct Delivery</h3>
@@ -124,6 +127,7 @@
   </footer>
 
 
+  <script src="translations.js"></script>
   <script src="script.js"></script>
   <script>
     function toggleMobileNav() {

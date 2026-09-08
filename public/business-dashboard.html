@@ -15,7 +15,9 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: center;">
-        <a href="index.html" class="logo">🌾 <span>FarmDirect</span></a>
+        <a href="index.html" class="logo" style="display:flex; align-items:center; text-decoration:none;">
+          <img src="Logo.png" alt="FarmDirect Logo" style="height: 45px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));" /> 
+        </a>
         <button class="close-sidebar-btn" onclick="toggleSidebar()">✕</button>
       </div>
       
@@ -45,7 +47,8 @@
           <button class="sidebar-toggle-btn icon-btn" onclick="toggleSidebar()">☰</button>
           <h2 id="pageTitle">Dashboard</h2>
         </div>
-        <div class="mobile-header-logout">
+        <div class="mobile-header-logout" style="display: flex; align-items: center; gap: 10px;">
+          <button onclick="toggleLanguage()" id="langToggleBtn" class="lang-btn">தமிழ் | English</button>
           <button class="icon-btn" onclick="logout()" style="color: #ef4444; font-size: 14px; font-weight: bold;">🚪 Logout</button>
         </div>
       </header>
@@ -125,6 +128,7 @@
 
   <div id="toastContainer" class="toast-container"></div>
 
+  <script src="translations.js"></script>
   <script src="script.js"></script>
   <script>
     function toggleSidebar() {
