@@ -81,7 +81,38 @@ const translations = {
   "Description": "விளக்கம்",
   "Publish Crop": "பயிரை வெளியிடவும்",
   "Notifications (Buyer Requests)": "அறிவிப்புகள் (வாங்குபவர் கோரிக்கைகள்)",
-  "🎙️ Read Instructions": "🎙️ வழிமுறைகளைப் படிக்கவும்"
+  "🎙️ Read Instructions": "🎙️ வழிமுறைகளைப் படிக்கவும்",
+  
+  // Profile & New Menu
+  "My Products": "எனது தயாரிப்புகள்",
+  "Find Buyers": "வாங்குபவர்களை தேடுங்கள்",
+  "Profile": "சுயவிவரம்",
+  "Edit Profile": "சுயவிவரத்தை திருத்து",
+  "Name": "பெயர்",
+  "Logout": "வெளியேறு",
+  
+  // Daily News & Updates
+  "Today's Agriculture Updates": "இன்றைய விவசாய செய்திகள்",
+  "Daily Market & Crop News": "தினசரி சந்தை மற்றும் பயிர் செய்திகள்",
+  "Current Price": "தற்போதைய விலை",
+  "Yesterday": "நேற்று",
+  "Price Change": "விலை மாற்றம்",
+  "Demand": "தேவை",
+  "High": "அதிகம்",
+  "Moderate": "நடுத்தரம்",
+  "Market Trend": "சந்தை போக்கு",
+  "Increasing": "அதிகரிக்கிறது 📈",
+  "Decreasing": "குறைகிறது 📉",
+  "Weather Alert": "வானிலை எச்சரிக்கை",
+  "Government Scheme": "அரசு திட்டம்",
+  "Farming Tips": "விவசாய குறிப்புகள்",
+  "Market Alert": "சந்தை எச்சரிக்கை",
+  "Supply": "விநியோகம்",
+  "View More": "மேலும் பார்க்க",
+  "Tomato": "தக்காளி",
+  "Onion": "வெங்காயம்",
+  "Potato": "உருளைக்கிழங்கு",
+  "Recommended": "பரிந்துரைக்கப்படுகிறது"
 };
 
 window.translations = translations;

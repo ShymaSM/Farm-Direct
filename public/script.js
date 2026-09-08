@@ -241,7 +241,6 @@ if (farmerRegForm) {
         uid: userCredential.user.uid,
         role: 'farmer',
         name: document.getElementById('f_name').value,
-        email: email,
         phone: document.getElementById('f_phone').value,
         farmName: document.getElementById('f_farmName').value,
         location: document.getElementById('f_location').value,
@@ -295,7 +294,6 @@ if (buyerRegForm) {
         name: document.getElementById('b_name').value,
         businessName: document.getElementById('b_businessName').value,
         businessType: document.getElementById('b_businessType').value,
-        email: email,
         phone: document.getElementById('b_phone').value,
         location: document.getElementById('b_location').value,
         district: document.getElementById('b_district').value,
@@ -338,6 +336,10 @@ if (window.location.pathname.includes('farmer-dashboard.html')) {
         }
         if (userDoc.exists) {
           document.getElementById('userName').textContent = userDoc.data().name;
+          
+          if(document.getElementById('profileName')) document.getElementById('profileName').textContent = userDoc.data().name;
+          if(document.getElementById('profilePhone')) document.getElementById('profilePhone').textContent = userDoc.data().phone || 'No phone provided';
+          
           setupFarmerListeners(user, userDoc.data());
         }
       }
@@ -390,7 +392,6 @@ function setupFarmerListeners(user, userData) {
         const cropData = {
           farmerId: user.uid,
           farmerName: userData.name,
-          farmerEmail: userData.email,
           cropName: document.getElementById('cropName').value,
           quantity: parseInt(document.getElementById('cropQuantity').value),
           pricePerKg: parseFloat(document.getElementById('cropPrice').value),
@@ -430,6 +431,9 @@ function setupFarmerListeners(user, userData) {
     notifGrid.innerHTML = html;
     translatePage();
   });
+
+  // Generate Daily News & Updates
+  generateDailyUpdates('farmer', userData.district || userData.location);
 }
 
 
@@ -445,7 +449,12 @@ if (window.location.pathname.includes('business-dashboard.html')) {
           return;
         }
         if (userDoc.exists) {
-          document.getElementById('userName').textContent = userDoc.data().businessName || userDoc.data().name;
+          const displayName = userDoc.data().businessName || userDoc.data().name;
+          document.getElementById('userName').textContent = displayName;
+          
+          if(document.getElementById('profileName')) document.getElementById('profileName').textContent = displayName;
+          if(document.getElementById('profilePhone')) document.getElementById('profilePhone').textContent = userDoc.data().phone || 'No phone provided';
+          
           setupBusinessListeners(user, userDoc.data());
         }
       }
@@ -566,7 +575,6 @@ function setupBusinessListeners(user, userData) {
           farmerId: crop.farmerId,
           buyerId: user.uid,
           buyerName: userData.businessName,
-          buyerEmail: userData.email,
           cropName: crop.cropName,
           requestedQuantity: parseInt(document.getElementById('reqQty').value),
           offeredPrice: parseFloat(document.getElementById('reqPrice').value),
@@ -600,6 +608,142 @@ function setupBusinessListeners(user, userData) {
   window.closeModal = function() {
     const overlay = document.getElementById('modalOverlay');
     if(overlay) overlay.classList.remove('active');
+  }
+
+  // Generate Daily News & Updates
+  generateDailyUpdates('business', userData.district || userData.location);
+}
+
+// --- Daily News & Market Updates ---
+function generateDailyUpdates(role, userLocation) {
+  const loc = userLocation || 'your area';
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+  
+  let updates = [];
+  
+  if (role === 'farmer') {
+    updates = [
+      {
+        type: 'price',
+        topic: 'Tomato',
+        title: "Today's Tomato Update",
+        date: today,
+        currentPrice: '₹35/kg',
+        yesterdayPrice: '₹30/kg',
+        trend: 'up',
+        change: '+₹5/kg',
+        demand: 'High',
+        summary: `Demand for tomatoes is extremely high in ${loc} today. Buyers are actively looking for fresh stock.`,
+        source: 'Local Market Board',
+        class: 'news-card'
+      },
+      {
+        type: 'weather',
+        topic: 'Weather Alert',
+        title: "Heavy Rainfall Expected",
+        date: today,
+        trend: 'neutral',
+        summary: `Meteorological department warns of heavy rain in ${loc} over the next 48 hours. Secure harvested crops.`,
+        source: 'Weather Dept',
+        class: 'news-card news-weather'
+      },
+      {
+        type: 'scheme',
+        topic: 'Government Scheme',
+        title: "Fertilizer Subsidy Expanded",
+        date: today,
+        trend: 'neutral',
+        summary: "The government has announced a 15% extra subsidy on organic fertilizers for the current season.",
+        source: 'Ministry of Agriculture',
+        class: 'news-card news-alert'
+      }
+    ];
+  } else {
+    updates = [
+      {
+        type: 'price',
+        topic: 'Market Alert',
+        title: "Tomato — High Demand",
+        date: today,
+        currentPrice: '₹35/kg (Wholesale)',
+        trend: 'up',
+        change: '+12%',
+        supply: 'Moderate',
+        summary: `Tomato prices have increased. Recommended action: Contact nearby tomato farmers in ${loc} to secure supply early.`,
+        source: 'FarmDirect Analytics',
+        class: 'news-card news-alert'
+      },
+      {
+        type: 'price',
+        topic: 'Onion',
+        title: "Onion Supply Stabilized",
+        date: today,
+        currentPrice: '₹22/kg',
+        trend: 'down',
+        change: '-₹3/kg',
+        supply: 'High',
+        summary: `Fresh onion harvests have arrived in ${loc} markets. Wholesale rates are optimal for bulk purchasing.`,
+        source: 'Local Market Board',
+        class: 'news-card'
+      },
+      {
+        type: 'news',
+        topic: 'Farming Tips',
+        title: "Organic Produce Premium",
+        date: today,
+        trend: 'up',
+        summary: "Retail demand for certified organic vegetables has grown by 20% this month. Consider expanding organic inventory.",
+        source: 'Market Trends 2026',
+        class: 'news-card'
+      }
+    ];
+  }
+
+  let html = '';
+  updates.forEach(u => {
+    let metaHtml = '';
+    
+    if (u.type === 'price' && role === 'farmer') {
+      metaHtml = `
+        <div class="news-meta">
+          <div class="meta-item"><span class="meta-label">Current Price</span><span class="meta-value">${u.currentPrice}</span></div>
+          <div class="meta-item"><span class="meta-label">Yesterday</span><span class="meta-value">${u.yesterdayPrice}</span></div>
+          <div class="meta-item"><span class="meta-label">Price Change</span><span class="meta-value ${u.trend === 'up' ? 'trend-up' : 'trend-down'}">${u.change}</span></div>
+          <div class="meta-item"><span class="meta-label">Demand</span><span class="meta-value" style="color:var(--primary-color)">${u.demand}</span></div>
+        </div>
+      `;
+    } else if (u.type === 'price' && role === 'business') {
+      metaHtml = `
+        <div class="news-meta">
+          <div class="meta-item"><span class="meta-label">Current Price</span><span class="meta-value">${u.currentPrice}</span></div>
+          <div class="meta-item"><span class="meta-label">Price Change</span><span class="meta-value ${u.trend === 'up' ? 'trend-up' : 'trend-down'}">${u.change}</span></div>
+          <div class="meta-item"><span class="meta-label">Supply</span><span class="meta-value">${u.supply}</span></div>
+        </div>
+      `;
+    }
+
+    html += `
+      <div class="${u.class}">
+        <div class="news-header">
+          <span style="font-weight:600; color:var(--primary-color);">${u.topic}</span>
+          <span>${u.date}</span>
+        </div>
+        <h3 class="news-title">${u.title}</h3>
+        ${metaHtml}
+        <p class="news-summary">${u.summary}</p>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:12px; color:#888;">Source: ${u.source}</span>
+          <button class="secondary-btn" style="padding: 6px 12px; font-size:12px;">View More</button>
+        </div>
+      </div>
+    `;
+  });
+
+  const containerId = role === 'farmer' ? 'farmerNewsGrid' : 'businessNewsGrid';
+  const container = document.getElementById(containerId);
+  if (container) {
+    container.innerHTML = html;
+    translatePage();
   }
 }
 
